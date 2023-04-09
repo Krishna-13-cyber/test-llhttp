@@ -1,15 +1,19 @@
-NAME = main
+CC=gcc
+INC_PATH = -I/usr/include
+CFLAGS=-Wall -Wextra -g -O2 $(INC_PATH)
+SOURCES= llhttp.c llhttp.o llhttp.h test.c
+OBJECTS=$(patsubst %.c, %.o, $(SOURCES))
+EXECUTABLE=bin/to
 
-CFLAGS = -Wall -Wextra
+all:    build $(EXECUTABLE)
 
-CC = gcc
+$(EXECUTABLE): $(SOURCES)
+	$(CC) $(CFLAGS) $(SOURCES) -o $@
 
-#SRC=$(wildcard *.c*.h)
-SRC= test.c llhttp.h llhttp.o
+build:
+	@mkdir -p bin
 
-all: $(NAME)
-
-$(NAME): $(SRC)
-	$(CC) $(CFLAGS) $^ -o $@
-
-.PHONY = all
+clean:
+	rm -rf $(EXECUTABLE) $(OBJECTS) bin
+	find . -name "*~" -exec rm {} \;
+	find . -name "*.o" -exec rm {} \;
